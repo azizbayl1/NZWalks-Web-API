@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NZWalks.API.Migrations
 {
     [DbContext(typeof(NZWalksDbContext))]
-    [Migration("20240304115752_init")]
+    [Migration("20240313113559_init")]
     partial class init
     {
         /// <inheritdoc />

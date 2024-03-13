@@ -19,9 +19,8 @@ namespace NZWalks.API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            
             //Seed Data
-
             //For Difficulties
             var difficulties = new List<Difficulty>()
             {
@@ -41,11 +40,6 @@ namespace NZWalks.API.Data
                     Name = "Hard"
                 }
             };
-
-            //Seed difficulties to the database
-            modelBuilder.Entity<Difficulty>().HasData(difficulties);
-
-
             //For Regions
             var regions = new List<Region>()
             {
@@ -93,6 +87,8 @@ namespace NZWalks.API.Data
                 }
             };
 
+            //Seed difficulties to the database
+            modelBuilder.Entity<Difficulty>().HasData(difficulties);
             //Seed regions to the database
             modelBuilder.Entity<Region>().HasData(regions);
         }
