@@ -40,6 +40,7 @@ namespace NZWalks.API.Data
                     Name = "Hard"
                 }
             };
+
             //For Regions
             var regions = new List<Region>()
             {
@@ -87,9 +88,8 @@ namespace NZWalks.API.Data
                 }
             };
 
-            //Seed difficulties to the database
+            //Seed to the database
             modelBuilder.Entity<Difficulty>().HasData(difficulties);
-            //Seed regions to the database
             modelBuilder.Entity<Region>().HasData(regions);
         }
     }
