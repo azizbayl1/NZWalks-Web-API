@@ -12,13 +12,11 @@ namespace NZWalks.API.Controllers
     [ApiController]
     public class RegionsController : ControllerBase
     {
-        private readonly NZWalksDbContext _dbContext;
         private readonly IRegionRepository _regionRepository;
         private readonly IMapper _mapper;
 
-        public RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository, IMapper mapper)
+        public RegionsController(IRegionRepository regionRepository, IMapper mapper)
         {
-            _dbContext = dbContext;
             _regionRepository = regionRepository;
             _mapper = mapper;
         }
@@ -27,10 +25,12 @@ namespace NZWalks.API.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, 
+            [FromQuery] string? sortBy = null, [FromQuery] bool isAscending = true, 
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 25)
         {
             //Get Data From Database (Domain models)
-            var regionsDomain = await _regionRepository.GetAllAsync();
+            var regionsDomain = await _regionRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
 
             return Ok(_mapper.Map<List<RegionDTO>>(regionsDomain));
         }
