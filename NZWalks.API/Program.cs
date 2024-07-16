@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NZWalks.API.Data;
@@ -18,14 +19,32 @@ builder.Services.AddSwaggerGen();
 
 //Add DB connection
 //builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksMsConnectionString")));
-builder.Services.AddDbContext<NZWalksDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("NZWalksConnectionString")));
-builder.Services.AddDbContext<NZWalksAuthDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("NZWalksAuthConnectionString")));
+builder.Services.AddDbContext<NZWalksDbContext>(options =>
+options.UseNpgsql(builder.Configuration.GetConnectionString("NZWalksConnectionString")));
+builder.Services.AddDbContext<NZWalksAuthDbContext>(options =>
+options.UseNpgsql(builder.Configuration.GetConnectionString("NZWalksAuthConnectionString")));
 
 //Repositories
 builder.Services.AddScoped<IRegionRepository, RegionRepository>();
 builder.Services.AddScoped<IWalkRepository, WalkRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("NZWalks")
+    .AddEntityFrameworkStores<NZWalksAuthDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 1;
+});
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
