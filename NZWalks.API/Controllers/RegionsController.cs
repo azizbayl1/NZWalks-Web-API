@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.CustomActionFilters;
 using NZWalks.API.Data;
@@ -25,6 +26,7 @@ namespace NZWalks.API.Controllers
 
         [HttpGet]
         [Route("GetAll")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, 
             [FromQuery] string? sortBy = null, [FromQuery] bool isAscending = true, 
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 25)
@@ -42,6 +44,7 @@ namespace NZWalks.API.Controllers
 
         [HttpGet]
         [Route("Get{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
             //Get Region Domain Model from Database
@@ -59,9 +62,11 @@ namespace NZWalks.API.Controllers
 
 
         #region CREATE A NEW REGION
+
         [HttpPost]
+        [Authorize]
         [ValidateModel]
-        [Route("Create")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateRegion([FromBody] AddRegionRequestDTO addRegionRequestDto)
         {
             //Convert DTO to Domain Model
@@ -75,13 +80,16 @@ namespace NZWalks.API.Controllers
 
             return CreatedAtAction(nameof(GetByIdAsync), new { id = regionDto.Id }, regionDto);
         }
+
         #endregion
 
 
         #region UPDATE REGION (by Id)
+
         [HttpPut]
         [ValidateModel]
         [Route("Update{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDTO updateRegionRequestDTO)
         {
             //Map DTO to Domain Model
@@ -97,12 +105,15 @@ namespace NZWalks.API.Controllers
 
             return Ok(_mapper.Map<RegionDTO>(regionDomainModel));
         }
+
         #endregion
 
 
         #region DELETE REGION (by Id)
+
         [HttpDelete]
         [Route("Delete{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var regionDomainModel = await _regionRepository.DeleteAsync(id);
@@ -115,6 +126,7 @@ namespace NZWalks.API.Controllers
             //Convert Domain Model to DTO to return Deleted region back
             return Ok(_mapper.Map<RegionDTO>(regionDomainModel));
         }
+
         #endregion
     }
 }

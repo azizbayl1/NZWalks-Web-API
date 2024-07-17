@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Models.DTO;
+using NZWalks.API.Repositories;
 
 namespace NZWalks.API.Controllers
 {
@@ -10,9 +11,12 @@ namespace NZWalks.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
-        public AuthController(UserManager<IdentityUser> userManager)
+        private readonly ITokenRepository _tokenRepository;
+
+        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
         {
             _userManager = userManager;
+            _tokenRepository = tokenRepository;
         }
 
         //POST: api/Auth/Register
@@ -52,18 +56,28 @@ namespace NZWalks.API.Controllers
         {
             var user = await _userManager.FindByEmailAsync(loginRequestDto.UserName);
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, loginRequestDto.Password))
+            if (user != null)
             {
-                //var checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
+                var checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
 
-                //if (checkPasswordResult)
-                //{
+                if (checkPasswordResult)
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+
                     //Create a token
+                    if (roles != null)
+                    {
+                        var jwtToken = _tokenRepository.CreateJWTToken(user, roles.ToList());
 
-                    return Ok("User has been logged in!");
-                //}
+                        var response = new LoginResponseDto
+                        {
+                            JwtToken = jwtToken
+                        };
+
+                        return Ok(response);
+                    }
+                }
             }
-
             return BadRequest("Invalid login attempt");
         }
     }
