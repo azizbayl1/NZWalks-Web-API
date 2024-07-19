@@ -70,7 +70,7 @@ namespace NZWalks.API.Repositories
         public async Task<Region?> GetByIdAsync(Guid id)
         {
             return await _dbContext.Regions.FirstOrDefaultAsync(r => r.Id == id);
-            //return await dbContext.Regions.Find(id);
+            //return await _dbContext.Regions.Find(id);
         }
 
         public async Task<Region?> UpdateAsync(Guid id, Region region)

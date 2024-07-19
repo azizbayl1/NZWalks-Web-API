@@ -26,7 +26,7 @@ namespace NZWalks.API.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        [Authorize(Roles = "Reader")]
+        [Authorize(Roles = "Reader, Writer")]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, 
             [FromQuery] string? sortBy = null, [FromQuery] bool isAscending = true, 
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 25)
@@ -44,7 +44,7 @@ namespace NZWalks.API.Controllers
 
         [HttpGet]
         [Route("Get{id:Guid}")]
-        [Authorize(Roles = "Writer")]
+        [Authorize(Roles = "Reader, Writer")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
             //Get Region Domain Model from Database

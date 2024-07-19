@@ -66,7 +66,7 @@ namespace NZWalks.API.Repositories
 
 
             return await walks.Skip(skipResults).Take(pageSize).ToListAsync();
-            //return await dbContext.Walks.Include(w => w.Region).Include("Difficulty").ToListAsync();
+            //return await _dbContext.Walks.Include(w => w.Region).Include("Difficulty").ToListAsync();
         }
 
         public async Task<Walk?> GetByIdAsync(Guid id)
