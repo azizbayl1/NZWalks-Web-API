@@ -12,7 +12,7 @@ namespace NZWalks.API.Controllers
     {
         private readonly IImageRepository imageRepository;
 
-        public ImagesController(IImageRepository imageRepository) 
+        public ImagesController(IImageRepository imageRepository)
         {
             this.imageRepository = imageRepository;
         }
