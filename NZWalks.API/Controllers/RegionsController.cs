@@ -6,6 +6,7 @@ using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO;
 using NZWalks.API.Repositories;
+using System.Text.Json;
 
 namespace NZWalks.API.Controllers
 {
@@ -15,24 +16,30 @@ namespace NZWalks.API.Controllers
     {
         private readonly IRegionRepository _regionRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<RegionsController> _logger;
 
-        public RegionsController(IRegionRepository regionRepository, IMapper mapper)
+        public RegionsController(IRegionRepository regionRepository, IMapper mapper, ILogger<RegionsController> logger)
         {
             _regionRepository = regionRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         #region GET ALL REGIONS
 
         [HttpGet]
         [Route("GetAll")]
-        [Authorize(Roles = "Reader, Writer")]
+        //[Authorize(Roles = "Reader, Writer")]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, 
             [FromQuery] string? sortBy = null, [FromQuery] bool isAscending = true, 
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 25)
         {
+            _logger.LogInformation("GetAll regions action method invoked");
+
             //Get Data From Database (Domain models)
             var regionsDomain = await _regionRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending, pageNumber, pageSize);
+
+            _logger.LogInformation($"GetAll regions action method completed: {JsonSerializer.Serialize(regionsDomain)}");
 
             return Ok(_mapper.Map<List<RegionDTO>>(regionsDomain));
         }
