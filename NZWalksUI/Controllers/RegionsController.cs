@@ -17,7 +17,7 @@ namespace NZWalksUI.Controllers
             {
                 var client = httpClientFactory.CreateClient();
 
-                var httpResponseMessage = await client.GetAsync("https://localhost:7158/api/regions");
+                var httpResponseMessage = await client.GetAsync("https://localhost:7158/api/regions/GetAll");
 
                 httpResponseMessage.EnsureSuccessStatusCode();
 
