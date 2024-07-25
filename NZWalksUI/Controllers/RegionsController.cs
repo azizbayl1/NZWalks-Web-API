@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NZWalksUI.Models.DTO;
 
 namespace NZWalksUI.Controllers
 {
@@ -12,6 +13,7 @@ namespace NZWalksUI.Controllers
         }
         public async Task<IActionResult> Index()
         {
+            List<RegionDto> regions = new List<RegionDto>();
             //Get all regions from Web API
             try
             {
@@ -21,16 +23,16 @@ namespace NZWalksUI.Controllers
 
                 httpResponseMessage.EnsureSuccessStatusCode();
 
-                var stringResponseBody = await httpResponseMessage.Content.ReadAsStringAsync();
+                regions.AddRange(await httpResponseMessage.Content.ReadFromJsonAsync<IEnumerable<RegionDto>>());
 
-                ViewBag.Regions = stringResponseBody;
+                
             }
             catch (Exception)
             {
                 //Log error
             }
             
-            return View();
+            return View(regions);
         }
     }
 }
