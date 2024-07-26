@@ -71,8 +71,8 @@ namespace NZWalks.API.Controllers
         #region CREATE A NEW REGION
 
         [HttpPost]
-        [Authorize]
         [ValidateModel]
+        [Route("Create")]
         //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateRegion([FromBody] AddRegionRequestDTO addRegionRequestDto)
         {
@@ -85,7 +85,7 @@ namespace NZWalks.API.Controllers
             //Map Domain model back to DTO
             var regionDto = _mapper.Map<RegionDTO>(regionDomainModel);
 
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = regionDto.Id }, regionDto);
+            return Ok(_mapper.Map<RegionDTO>(regionDomainModel));
         }
 
         #endregion
