@@ -125,7 +125,6 @@ namespace NZWalksUI.Controllers
                 //log error
                 throw;
             }
-
         }
     }
 }
