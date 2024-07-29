@@ -30,8 +30,8 @@ namespace NZWalks.API.Controllers
         [HttpGet]
         //[Route("GetAll")]
         //[Authorize(Roles = "Reader, Writer")]
-        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, 
-            [FromQuery] string? sortBy = null, [FromQuery] bool isAscending = true, 
+        public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
+            [FromQuery] string? sortBy = null, [FromQuery] bool isAscending = true,
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 25)
         {
             _logger.LogInformation("GetAll regions action method invoked");
@@ -49,8 +49,7 @@ namespace NZWalks.API.Controllers
 
         #region GET A SINGLE REGION (by Id)
 
-        [HttpGet]
-        [Route("{id:Guid}")]
+        [HttpGet("{id:guid}")]
         //[Authorize(Roles = "Reader, Writer")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
@@ -72,7 +71,6 @@ namespace NZWalks.API.Controllers
 
         [HttpPost]
         [ValidateModel]
-        //[Route("Create")]
         //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateRegion([FromBody] AddRegionRequestDTO addRegionRequestDto)
         {
@@ -93,9 +91,8 @@ namespace NZWalks.API.Controllers
 
         #region UPDATE REGION (by Id)
 
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         [ValidateModel]
-        [Route("{id:Guid}")]
         //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDTO updateRegionRequestDTO)
         {
@@ -118,8 +115,7 @@ namespace NZWalks.API.Controllers
 
         #region DELETE REGION (by Id)
 
-        [HttpDelete]
-        [Route("{id:Guid}")]
+        [HttpDelete("{id:guid}")]
         //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {

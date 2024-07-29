@@ -25,6 +25,7 @@ namespace NZWalks.API.Controllers
 
         [HttpGet]
         //[Route("GetAll")]
+        //[Authorize(Roles = "Writer","Reader")]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
             [FromQuery] string? sortBy, [FromQuery] bool? isAscending,
             [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 100)
@@ -39,8 +40,8 @@ namespace NZWalks.API.Controllers
 
         #region GET A SINGLE WALK
 
-        [HttpGet]
-        [Route("{id:Guid}")]
+        [HttpGet("{id:guid}")]
+        //[Authorize(Roles = "Writer","Reader")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             var walkDomainModel = await walkRepository.GetByIdAsync(id);
@@ -58,9 +59,9 @@ namespace NZWalks.API.Controllers
 
         #region CREATE A NEW WALK
 
-        [HttpPost]
+        [HttpPost("{id:guid}")]
         [ValidateModel]
-        //[Route("Create")]
+        //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> Create([FromBody] AddWalkRequestDTO addWalkRequestDTO)
         {
             //Map DTO to Domain Model
@@ -75,9 +76,9 @@ namespace NZWalks.API.Controllers
 
 
         #region UPDATE A WALK
-        [HttpPut]
+        [HttpPut("{id:guid}")]
         [ValidateModel]
-        [Route("{id:Guid}")]
+        //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> Update([FromRoute] Guid id, UpdateWalkRequestDTO updateWalkRequestDTO)
         {
             //Map DTO to Domain model
@@ -96,8 +97,8 @@ namespace NZWalks.API.Controllers
 
 
         #region DELETE A WALK
-        [HttpDelete]
-        [Route("{id:Guid}")]
+        [HttpDelete("{id:guid}")]
+        //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var deletedWalkdomainModel = await walkRepository.DeleteAsync(id);
