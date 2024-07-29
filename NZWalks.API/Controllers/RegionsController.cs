@@ -28,7 +28,7 @@ namespace NZWalks.API.Controllers
         #region GET ALL REGIONS
 
         [HttpGet]
-        [Route("GetAll")]
+        //[Route("GetAll")]
         //[Authorize(Roles = "Reader, Writer")]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, 
             [FromQuery] string? sortBy = null, [FromQuery] bool isAscending = true, 
@@ -50,7 +50,7 @@ namespace NZWalks.API.Controllers
         #region GET A SINGLE REGION (by Id)
 
         [HttpGet]
-        [Route("Get{id:Guid}")]
+        [Route("{id:Guid}")]
         //[Authorize(Roles = "Reader, Writer")]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
@@ -72,7 +72,7 @@ namespace NZWalks.API.Controllers
 
         [HttpPost]
         [ValidateModel]
-        [Route("Create")]
+        //[Route("Create")]
         //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateRegion([FromBody] AddRegionRequestDTO addRegionRequestDto)
         {
@@ -95,7 +95,7 @@ namespace NZWalks.API.Controllers
 
         [HttpPut]
         [ValidateModel]
-        [Route("Update{id:Guid}")]
+        [Route("{id:Guid}")]
         //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDTO updateRegionRequestDTO)
         {
@@ -119,7 +119,7 @@ namespace NZWalks.API.Controllers
         #region DELETE REGION (by Id)
 
         [HttpDelete]
-        [Route("Delete{id:Guid}")]
+        [Route("{id:Guid}")]
         //[Authorize(Roles = "Writer")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
