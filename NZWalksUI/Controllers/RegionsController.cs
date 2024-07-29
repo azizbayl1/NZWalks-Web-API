@@ -28,13 +28,13 @@ namespace NZWalksUI.Controllers
 
                 regions.AddRange(await httpResponseMessage.Content.ReadFromJsonAsync<IEnumerable<RegionDto>>());
 
-                
+
             }
             catch (Exception)
             {
                 //Log error
             }
-            
+
             return View(regions);
         }
 
@@ -66,6 +66,21 @@ namespace NZWalksUI.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var client = httpClientFactory.CreateClient();
+
+            var httpResponse = await client.GetFromJsonAsync<RegionDto>($"https://localhost:7158/api/regions/Get{id.ToString()}");
+
+            if (httpResponse is not null)
+            {
+                return View(httpResponse);
+            }
+
+            return View(null);
         }
     }
 }
